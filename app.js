@@ -2,6 +2,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
 const app = express();
+const { generalLimiter } = require('./middleware/rateLimit');
+const helmet = require("helmet");
+require('dotenv').config();
 
 const saucesRoutes = require('./routes/sauce');
 const userRoutes = require('./routes/user');
@@ -13,7 +16,7 @@ app.use((req, res, next) => {
     next();
 });
 
-mongoose.connect('mongodb+srv://Moi:hN01KBGalBboYfCM@cluster0.kpeg0iu.mongodb.net/?retryWrites=true&w=majority',
+mongoose.connect(process.env.MONGO_URL,
     {
         useNewUrlParser: true,
         useUnifiedTopology: true
@@ -23,6 +26,9 @@ mongoose.connect('mongodb+srv://Moi:hN01KBGalBboYfCM@cluster0.kpeg0iu.mongodb.ne
 
 
 app.use(express.json());
+app.use(helmet());
+app.use(helmet.crossOriginResourcePolicy({ policy : "cross-origin" }));
+app.use(generalLimiter);
 
 app.use('/api/sauces', saucesRoutes);
 app.use('/api/auth', userRoutes);
