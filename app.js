@@ -27,7 +27,7 @@ mongoose.connect(process.env.MONGO_URL,
 
 app.use(express.json());
 app.use(helmet());
-app.use(helmet.crossOriginResourcePolicy({ policy : "cross-origin" }));
+app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 app.use(generalLimiter);
 
 app.use('/api/sauces', saucesRoutes);
