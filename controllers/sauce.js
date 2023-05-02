@@ -81,13 +81,17 @@ exports.likeSauce = (req, res, next) => {
 
             // Si l'utilisateur a aimé la sauce
             if (like === 1) {
-                sauce.likes += 1;
-                sauce.usersLiked.push(userId);
-
+                if (!sauce.usersLiked.includes(userId)) {
+                    sauce.likes += 1;
+                    sauce.usersLiked.push(userId);
+                }
+                
                 // Si l'utilisateur n'a pas aimé la sauce
             } else if (like === -1) {
-                sauce.dislikes += 1;
-                sauce.usersDisliked.push(userId);
+                if (!sauce.usersDisliked.includes(userId)) {
+                    sauce.dislikes += 1;
+                    sauce.usersDisliked.push(userId);
+                }
 
                 // Si l'utilisateur a retiré son like/dislike
             } else if (like === 0) {
